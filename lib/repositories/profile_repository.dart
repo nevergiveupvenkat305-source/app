@@ -2,12 +2,13 @@ import '../models/app_profile.dart';
 import '../services/supabase_service.dart';
 
 class ProfileRepository {
-  Future<AppProfile?> fetchCurrent() async {
+  Future<AppProfile?> fetchCurrent() {
     final uid = currentUserId;
-    if (uid == null) return null;
-    final row = await supabase.from('profiles').select().eq('id', uid).maybeSingle();
-    if (row == null) return null;
-    return AppProfile.fromRow(row);
+    if (uid == null) return Future.value(null);
+    return supabaseReadOr(() async {
+      final row = await supabase.from('profiles').select().eq('id', uid).maybeSingle();
+      return row == null ? null : AppProfile.fromRow(row);
+    }, null, label: 'ProfileRepository.fetchCurrent');
   }
 
   Future<void> upsertCurrent({required String name, String? shgId, String? role, String? village}) async {

@@ -9,18 +9,12 @@ import '../services/supabase_service.dart';
 /// than crash — the schema in supabase/migrations/ may not be applied yet
 /// wherever this runs.
 class SavingsRepository {
-  Future<List<SavingsEntryRow>> fetchEntries({String? shgId}) async {
-    if (!isSupabaseConfigured) return [];
-    try {
-      var query = supabase.from('savings_entries').select('*, profiles(name)');
-      if (shgId != null) query = query.eq('shg_id', shgId);
-      final rows = await query.order('entry_date', ascending: false);
-      return (rows as List).map((r) => SavingsEntryRow.fromRow(r as Map<String, dynamic>)).toList();
-    } catch (e) {
-      debugPrint('SavingsRepository.fetchEntries failed: $e');
-      return [];
-    }
-  }
+  Future<List<SavingsEntryRow>> fetchEntries({String? shgId}) => supabaseReadOr(() async {
+        var query = supabase.from('savings_entries').select('*, profiles(name)');
+        if (shgId != null) query = query.eq('shg_id', shgId);
+        final rows = await query.order('entry_date', ascending: false);
+        return (rows as List).map((r) => SavingsEntryRow.fromRow(r as Map<String, dynamic>)).toList();
+      }, <SavingsEntryRow>[], label: 'SavingsRepository.fetchEntries');
 
   Future<bool> addEntry({
     required String shgId,

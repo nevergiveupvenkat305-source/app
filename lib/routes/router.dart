@@ -7,6 +7,11 @@ import '../pages/auth/role_select_page.dart';
 import '../pages/auth/splash_page.dart';
 import '../pages/common/coming_soon.dart';
 import '../pages/dashboard/dashboard_page.dart';
+import '../pages/loans/loan_apply_page.dart';
+import '../pages/loans/loan_approval_page.dart';
+import '../pages/loans/loan_detail_page.dart';
+import '../pages/loans/loan_tracking_page.dart';
+import '../pages/loans/loans_home_page.dart';
 import '../pages/savings/savings_entry_page.dart';
 import '../pages/savings/savings_history_page.dart';
 import '../pages/savings/savings_home_page.dart';
@@ -48,10 +53,10 @@ GoRouter buildRouter(AppState appState) {
           comingSoon(Paths.savingsLedger, 'Savings Ledger'),
           comingSoon(Paths.savingsStatement, 'Savings Statement'),
           comingSoon(Paths.savingsGroupReport, 'Group Savings Report'),
-          comingSoon(Paths.loans, 'Loans'),
-          comingSoon(Paths.loanApply, 'Apply for Loan'),
-          comingSoon(Paths.loanApproval, 'Loan Approvals'),
-          comingSoon(Paths.loanTracking, 'Loan Tracking'),
+          GoRoute(path: Paths.loans, builder: (context, state) => const LoansHomePage()),
+          GoRoute(path: Paths.loanApply, builder: (context, state) => const LoanApplyPage()),
+          GoRoute(path: Paths.loanApproval, builder: (context, state) => const LoanApprovalPage()),
+          GoRoute(path: Paths.loanTracking, builder: (context, state) => const LoanTrackingPage()),
           comingSoon(Paths.meetings, 'Meetings'),
           comingSoon(Paths.meetingSchedule, 'Schedule Meeting'),
           comingSoon(Paths.meetingAttendance, 'Attendance'),
@@ -95,7 +100,7 @@ GoRouter buildRouter(AppState appState) {
           comingSoon(Paths.adminSchemes, 'Manage Schemes'),
           comingSoon(Paths.adminMonitoring, 'System Monitoring'),
           GoRoute(path: '/app/shg/members/:id', builder: (context, state) => ComingSoonPage(title: 'Member Detail')),
-          GoRoute(path: '/app/loans/:id', builder: (context, state) => ComingSoonPage(title: 'Loan Detail')),
+          GoRoute(path: '/app/loans/:id', builder: (context, state) => LoanDetailPage(loanId: state.pathParameters['id']!)),
           GoRoute(path: '/app/meetings/:id', builder: (context, state) => ComingSoonPage(title: 'Meeting Detail')),
           GoRoute(path: '/app/meetings/:id/mom', builder: (context, state) => ComingSoonPage(title: 'Minutes of Meeting')),
           GoRoute(path: '/app/livelihood/:id', builder: (context, state) => ComingSoonPage(title: 'Activity Detail')),

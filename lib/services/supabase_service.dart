@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../config/env.dart';
 
@@ -10,3 +12,17 @@ bool get isSupabaseConfigured => Env.supabaseUrl.isNotEmpty && Env.supabaseAnonK
 SupabaseClient get supabase => Supabase.instance.client;
 
 String? get currentUserId => isSupabaseConfigured ? supabase.auth.currentUser?.id : null;
+
+/// Runs a Supabase read with a short timeout so an unreachable/misconfigured
+/// backend fails over to [fallback] in a couple of seconds instead of
+/// leaving the UI on a spinner for the ~10-15s a blocked network connection
+/// can take to definitively fail.
+Future<T> supabaseReadOr<T>(Future<T> Function() query, T fallback, {String label = 'query'}) async {
+  if (!isSupabaseConfigured) return fallback;
+  try {
+    return await query().timeout(const Duration(seconds: 5));
+  } catch (e) {
+    debugPrint('$label failed, using fallback: $e');
+    return fallback;
+  }
+}
