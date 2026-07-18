@@ -7,6 +7,9 @@ import '../pages/auth/role_select_page.dart';
 import '../pages/auth/splash_page.dart';
 import '../pages/common/coming_soon.dart';
 import '../pages/dashboard/dashboard_page.dart';
+import '../pages/savings/savings_entry_page.dart';
+import '../pages/savings/savings_history_page.dart';
+import '../pages/savings/savings_home_page.dart';
 import '../state/app_state.dart';
 import 'paths.dart';
 
@@ -26,7 +29,7 @@ GoRouter buildRouter(AppState appState) {
     routes: [
       GoRoute(path: Paths.splash, builder: (context, state) => const SplashPage()),
       GoRoute(path: Paths.login, builder: (context, state) => const LoginPage()),
-      GoRoute(path: Paths.otp, builder: (context, state) => const OtpPage()),
+      GoRoute(path: Paths.otp, builder: (context, state) => OtpPage(phone: state.extra as String?)),
       GoRoute(path: Paths.profileSetup, builder: (context, state) => const ProfileSetupPage()),
       GoRoute(path: Paths.roleSelect, builder: (context, state) => const RoleSelectPage()),
       ShellRoute(
@@ -39,9 +42,9 @@ GoRouter buildRouter(AppState appState) {
           comingSoon(Paths.profile, 'Profile'),
           comingSoon(Paths.shgMembers, 'Members'),
           comingSoon(Paths.shgDocuments, 'Documents'),
-          comingSoon(Paths.savings, 'Savings'),
-          comingSoon(Paths.savingsEntry, 'Add Savings'),
-          comingSoon(Paths.savingsHistory, 'Savings History'),
+          GoRoute(path: Paths.savings, builder: (context, state) => const SavingsHomePage()),
+          GoRoute(path: Paths.savingsEntry, builder: (context, state) => const SavingsEntryPage()),
+          GoRoute(path: Paths.savingsHistory, builder: (context, state) => const SavingsHistoryPage()),
           comingSoon(Paths.savingsLedger, 'Savings Ledger'),
           comingSoon(Paths.savingsStatement, 'Savings Statement'),
           comingSoon(Paths.savingsGroupReport, 'Group Savings Report'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../routes/paths.dart';
+import '../../services/auth_service.dart';
 import '../../theme/app_theme.dart';
 import '../../theme/colors.dart';
 import '../../widgets/app_button.dart';
@@ -13,6 +14,28 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _controller = TextEditingController();
+  final _auth = AuthService();
+  bool _sending = false;
+  String? _notice;
+
+  Future<void> _sendOtp() async {
+    setState(() {
+      _sending = true;
+      _notice = null;
+    });
+    final phone = '+91${_controller.text}';
+    try {
+      await _auth.sendOtp(phone);
+    } on AuthNotConfiguredException catch (e) {
+      // SMS provider isn't configured yet (external integration to be added
+      // later) — fall through to the OTP screen anyway so the rest of the
+      // onboarding flow stays demoable.
+      _notice = e.toString();
+    }
+    if (!mounted) return;
+    setState(() => _sending = false);
+    context.go(Paths.otp, extra: phone);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +82,15 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 16),
               AppButton(
-                label: 'Send OTP',
+                label: _sending ? 'Sending...' : 'Send OTP',
                 fullWidth: true,
                 size: ButtonSize.lg,
-                onPressed: valid ? () => context.go(Paths.otp) : null,
+                onPressed: valid && !_sending ? _sendOtp : null,
               ),
+              if (_notice != null) ...[
+                const SizedBox(height: 12),
+                Text(_notice!, textAlign: TextAlign.center, style: AppTheme.sans(11, color: Accent.amber700)),
+              ],
               const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(12),

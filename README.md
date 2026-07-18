@@ -2,7 +2,7 @@
 
 A native mobile app for a Self-Help Group (SHG) management platform, covering all five user roles (Member, Leader/President, Community Resource Person, Cluster Level Federation, Administrator) and every feature tab from the product spec — savings, loans, meetings, financial records, livelihoods, marketplace, government schemes, training, digital payments, announcements, AI-powered advisors, reports, and analytics.
 
-This is a Flutter rewrite of an earlier React prototype. The onboarding flow and dashboards for all 5 roles are implemented; remaining feature modules are scaffolded as placeholder screens and are being ported one at a time.
+Built natively in Flutter, backed by Supabase. The onboarding flow, all 5 role dashboards, and the Savings module are fully wired end-to-end; remaining feature modules are being built out one at a time (see `supabase/migrations` and `lib/repositories` for the pattern each one follows).
 
 ## Stack
 

@@ -1,11 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/app_profile.dart';
 import '../models/types.dart';
+import '../repositories/profile_repository.dart';
 
 class AppState extends ChangeNotifier {
   AppUser user = defaultUser;
   Language language = Language.en;
   bool isAuthenticated = false;
+
+  /// Populated from Supabase (profiles table) once a real session exists.
+  /// Null in demo/offline mode — repositories treat that as "no backend scoping".
+  AppProfile? profile;
+  String? get shgId => profile?.shgId;
 
   static const _roleKey = 'shg_role';
   static const _authKey = 'shg_authenticated';
@@ -46,5 +53,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_authKey, v);
+  }
+
+  Future<void> loadProfile() async {
+    profile = await ProfileRepository().fetchCurrent();
+    notifyListeners();
   }
 }
