@@ -26,3 +26,23 @@ const meetings = <Meeting>[
   Meeting(id: 'mt4', date: '14 Jun 2026', time: '4:00 PM', venue: 'Anganwadi Centre, Kondapur', agenda: 'DAY-NRLM scheme awareness session', attendance: 10, total: 12, status: 'completed'),
   Meeting(id: 'mt5', date: '07 Jun 2026', time: '4:00 PM', venue: 'Anganwadi Centre, Kondapur', agenda: 'Weekly savings & training update', attendance: 9, total: 12, status: 'completed'),
 ];
+
+class ActionItem {
+  final String task;
+  final String owner;
+  final String due;
+  const ActionItem({required this.task, required this.owner, required this.due});
+}
+
+class MinutesOfMeeting {
+  static const decisions = <String>[
+    'Approved loan of ₹20,000 to Gowramma for agriculture inputs',
+    'Increased weekly savings from ₹300 to ₹500 from July',
+    'Scheduled financial literacy training for 12 Jul 2026',
+  ];
+  static const actionItems = <ActionItem>[
+    ActionItem(task: 'Submit MUDRA loan application documents', owner: 'Anasuya', due: '10 Jul 2026'),
+    ActionItem(task: 'Collect pending savings from June', owner: 'Padma Reddy', due: '05 Jul 2026'),
+    ActionItem(task: 'Update bank passbook entries', owner: 'Rajeshwari', due: '08 Jul 2026'),
+  ];
+}
